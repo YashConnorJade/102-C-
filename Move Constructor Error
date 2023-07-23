@@ -1,0 +1,66 @@
+#include <iostream>
+using namespace std;
+
+class move_Constructor
+{
+public:
+move_Constructor(int x = 1)
+	{
+		memberPtr = new int(x);
+	}
+
+	// Deep Copy Constructor
+	move_Constructor(const move_Constructor& other)
+		:move_Constructor(*other.memberPtr)
+	{
+		cout << "Copy Constructor Invoked" << endl;
+	}
+
+	// Move Constructor
+	move_Constructor(move_Constructor&& other) noexcept
+		:memberPtr(other.memberPtr)
+	{
+		other.memberPtr = nullptr;
+		cout << "Move Constructor Invoked" << endl;
+	}
+
+	~move_Constructor()
+	{
+		if (memberPtr != nullptr)
+		{
+			delete memberPtr;
+			cout << "Dynamic Object Deallocated." << endl;
+		}
+		else
+			cout << "Nothing to deallocate" << endl;
+	}
+
+	move_Constructor operator+(const move_Constructor& other)const
+	{
+		move_Constructor temp1(*memberPtr);
+		move_Constructor temp2(*other.memberPtr);
+		move_Constructor tamp1(*memberPtr + *other.memberPtr);
+
+		return tamp1;
+	}
+
+	void toString() const
+	{
+		cout << *memberPtr << endl;
+	}
+
+private:
+	int *memberPtr;
+};
+
+int main()
+{
+	move_Constructor mC1(3), mC2(3);
+	mC2.toString();
+
+	move_Constructor mC3(mC1 + mC2);
+	mC3.toString();
+
+	cout << "\n End of Program" << endl;
+	return 0;
+}
