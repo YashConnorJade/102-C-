@@ -1,0 +1,50 @@
+#include <iostream>
+using namespace std;
+
+template<typename T>
+bool lessThan(const T& operand1, const T& operand2)
+{
+	if (operand1 < operand2)
+		return true;
+	else
+		return false;
+}
+
+template<typename T>
+bool greaterThan(const T& operand1, const T& operand2)
+{
+	if (operand1 > operand2)
+		return true;
+	else
+		return false;
+}
+
+template<typename>
+using Test = bool(*) (const T&, const T&);
+
+// a typedef template is illegal
+// template<typename T>
+// typedef bool(*nope)(const T&, const T&);
+
+template <typename T>
+void compare(T operand1, T operand2, Test<T> comparator)
+{
+	if (comparator(operand1, operand2))
+		cout << "True" << endl;
+	else
+		cout << "False" << endl;
+}
+
+int main()
+{
+	int x{ 5 }, y{ 27 };
+	
+	cout << x << " > " << y << ": ";
+	compare(x, y,greaterThan);
+
+	cout << x << " > " << y << ": ";
+	compare(x, y, lessThan);
+
+	cout << "\nEnd of Program" << endl;
+	return 0;
+}
